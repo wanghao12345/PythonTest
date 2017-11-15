@@ -90,6 +90,24 @@ Python学习
 			2 C
 	5-3.列表生成式
 	5-4.生成器
+	5-5.迭代器
+		可迭代对象Iterable:可以直接作用于for循环的对象统称为可迭代对象（list,tuple,dict,set,str）
+		isinstance()：判断一个对象是否是Iterable对象
+		迭代器Iterator：可以被next()函数调用不断返回下一个值的对象称为迭代器
+		isinstance():判断一个对象是否是Iterator对象
+		生成器都是Iterator对象，但list、dict、str、虽然是Iterable，但不是Iterator,但是list、dict、str等Iterable可以通过iter()函数变成Iterator
+
+6.函数式编程
+	6-1.变量可以指向函数
+	6-2.函数名也是变量
+	6-3.传入函数
+	6-4.map/reduce
+		map:接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果
+	6-5.filter
+	6-6.sorted
+
+
+
 
 
 

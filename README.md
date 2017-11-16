@@ -98,13 +98,127 @@ Python学习
 		生成器都是Iterator对象，但list、dict、str、虽然是Iterable，但不是Iterator,但是list、dict、str等Iterable可以通过iter()函数变成Iterator
 
 6.函数式编程
-	6-1.变量可以指向函数
-	6-2.函数名也是变量
-	6-3.传入函数
-	6-4.map/reduce
-		map:接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果
-	6-5.filter
-	6-6.sorted
+	6-1.高阶函数
+		6-1-1.变量可以指向函数
+		6-1-2.函数名也是变量
+		6-1-3.传入函数
+		6-1-4.map/reduce
+			map:接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果
+		6-1-5.filter
+		6-1-6.sorted
+	6-2.返回函数
+		6-2-1.函数作为返回值：高阶函数除了可以接受函数作为参数外，还可以把函数作为结果值返回
+		6-2-2.闭包：当一个函数返回了一个函数后，其内部的局部变量还被新函数引用。(返回闭包时注意：返回函数不要引用任何循环变量，或者后续会发生变化的变量。如果一定要引用循环变量，方法就是再创建一个函数，用该函数的参数绑定循环变量当前的值，无论该循环变量后续如何更改，已绑定到函数参数的值不变)
+	6-3.匿名函数
+		关键字lambda表示匿名函数，冒号前面的X表示函数参数。匿名函数有个限制，就是只能有一个表达式，不用写return，返回值就是该表达式的结果。
+		好处：用匿名函数有个好处，因为函数没有名字，不必担心函数名冲突。此外，匿名函数也是一个函数对象，也可以把匿名函数父子给一个变量，再利用变量来调用该函数(f = lambda x:x+1)
+	6-4.装饰器
+		def now()
+			print('2017-11-15')
+		f = now   
+		f()
+		2017-11-15
+		now.__name__
+		now
+		f.__name__
+		now
+		(函数也是一个对象，而且函数对象可以被赋值给变量，所以通过变量也能调用该函数。函数对象有一个__name__属性,可以拿到函数的名字)
+		装饰器(Decorator)：需要增强now()函数的功能，比如，在函数调用前后自动打印日志，但又不希望改变now()函数的定义，这种代码运行期间动态增加功能的方式称之为"装饰器"
+	6-5.偏函数
+		functools.partial:把一个函数的某些参数给固定住（也就是设置默认值），返回一个新的函数，调用这个新函数会更简单。
+
+7.模块
+	7-1.使用模块
+	7-3.安装第三方模块
+
+8.面向对象编程
+	class Student(object):
+		def __init__(self,name,score):
+			self.name = name
+			self.score = score
+		def print_score(self):
+			print('%s:%s' %(self.name,self.score))
+	bart = Student('Bart Simpson',59)
+	bart.print_score()
+	8-1.类和实例
+	8-2.访问限制
+		在class内部，可以有属性和方法，而外部代码可以通过直接调用实例变量的方法来操作数据，这样，就隐藏了内部的复杂逻辑
+		私有变量：如果要让内部属性不被外部访问，可以把属性的名称前加上两个下划线__，在python中，实例的变量名如果以__开头，就变成了一个私有变量(private)，只有内部可以访问，外部不能访问，所以我们把Student类改一改
+		<!-- class Student(object):
+			def __init__(self,name,score):
+				self.__name = name
+				self.__score = score
+			def print_score(self):
+				print('%s:%s' %(self.__name,self.__score)) -->
+		get访问私有变量：
+			<!-- class Student(object):
+				...
+				def get_name(self):
+					return self.__name -->
+		set方法：
+	8-3.继承和多态
+		继承：在OOP程序设计中，当我们定义一个class的时候，可以从某个现有的class继承，新的class称为子类(Subclass)，而被继承的class称为基类、父类或超类(Base class、Super class).
+		class Animal(object):
+			def run(self):
+				print('Animal is running...')
+		class Dog(Animal):
+			pass
+		class Cat(Animal):
+			pass
+		继承的好处：子类获得了父类的全部功能。
+		多态：当子类和父类都存在相同的run()方法时，子类的run()覆盖了父类的run()，在代码运行的时候，总会调用子类的run()。
+		isinstance():判断一个变量是否是某个类型
+			a = list() #a是list类型
+			b = Animal() #b是Animal类型
+			c = Dog() #c是Dog类型
+			isinstance(a,list)    true
+			isinstance(b,Animal)  true
+			isinstance(c,Dog)     true
+			isinstance(c,Animal)  true
+			isinstance(b,Dog)     False
+		静态语言VS动态语言：
+			对于静态语言java来说，如果需要传入Animal类型，则传入的对象必须是Animal类型或者它的子类，否则，将无法调用run()方法。否则，将无法调用run方法。对于Python这样的动态语言来说，则不一定需要传入Animal类型。我们只需要保证传入的对象有一个run()方法就行了
+			class Timer(object):
+				def run(self):
+					print('Start...')
+			这就是动态语言的鸭子类型，它并不要求严格的继承体系，一个对象只要看起来像鸭子，走起路来像鸭子，那它就可以被看做是鸭子。
+	8-4.获取对象信息
+		使用type():
+			判断基本类型和变量
+		使用isinstance():
+			对于class的继承关系来说，使用type()就很不方便，要判断class的类型，可以使用isinstance()
+		使用dir():
+			如果要获得一个对象的所有属性和方法，可以使用dir函数，它返回一个包含字符串的list，比如，获得一个str对象的所有属性和方法
+		使用getattr()、setattr()以及hasattr()直接操作一个对象的状态:
+			class MyObject(object):
+				def __init__(self):
+					self.x = 9
+				def power(self):
+					return self.x * self.x
+				obj = MyObject()
+			hasattr(obj,'x')  true  判断某个对象是否有属性x
+			setattr(obj,'y',19)  给某个对象设置一个属性y
+			getattr(obj,'y') 获取某个对象的属性y也可以获得对象的方法
+	8-5.实例属性和类属性
+		实例绑定属性的方法：通过实例变量或者通过self变量
+			class Student(object):
+				def __init__(self,name):
+					self.name = name
+			s = Student('Bob')
+			s.score = 90
+		类属性：在class中定义属性
+			class Student(object):
+				name = 'Student'
+
+9.面向对象高级编程
+	9-1.使用__slots__
+		如果我们要限制实例的属性，比如只允许对Student实例添加name和age属性，因此利用__slots__可以限制该class实例能添加的属性
+	
+
+
+
+
+
 
 
 

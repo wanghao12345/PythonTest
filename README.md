@@ -212,7 +212,30 @@ Python学习
 
 9.面向对象高级编程
 	9-1.使用__slots__
-		如果我们要限制实例的属性，比如只允许对Student实例添加name和age属性，因此利用__slots__可以限制该class实例能添加的属性
+		如果我们要限制实例的属性，比如只允许对Student实例添加name和age属性，因此利用__slots__可以限制该class实例能添加的属性:
+		class Student(object):
+			__slots__=('name','age') #用tuple定义允许绑定的属性名称
+		s=Student()
+		s.name = 'Machael' #true
+		s.age  = 25 #true
+		s.score = 99 #false
+		注意：它只对当前的类之类起作用，对继承的子类是不起作用的。
+	9-2.使用@property
+		在绑定属性时，如果把属性暴露出去，虽然写起来很简单，但是，没有办法检查参数。
+		传统检查参数：
+			<!-- class Student(object):
+				def get_score(self):
+					return self.__score
+				def set_score(self,value):
+					if not isinstance(value,int):
+						raise ValueError('score must be an integer!')
+					if value<0 or value>100
+						reise ValueError('score must between 0~100')
+					self._score = value -->
+
+
+
+
 	
 
 

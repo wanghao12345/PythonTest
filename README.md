@@ -188,7 +188,7 @@ Python学习
 		使用isinstance():
 			对于class的继承关系来说，使用type()就很不方便，要判断class的类型，可以使用isinstance()
 		使用dir():
-			如果要获得一个对象的所有属性和方法，可以使用dir函数，它返回一个包含字符串的list，比如，获得一个str对象的所有属性和方法
+			如果要获得一个对象的所有属性和方法，可以使用dir函数，它返回一个包含字符串的list，比如，获得一个               str对象的所有属性和方法
 		使用getattr()、setattr()以及hasattr()直接操作一个对象的状态:
 			class MyObject(object):
 				def __init__(self):
@@ -212,7 +212,8 @@ Python学习
 
 9.面向对象高级编程
 	9-1.使用__slots__
-		如果我们要限制实例的属性，比如只允许对Student实例添加name和age属性，因此利用__slots__可以限制该class实例能添加的属性:
+		如果我们要限制实例的属性，比如只允许对Student实例添加name和age属性，因此利用__slots__可以限制该class实
+		例能添加的属性:
 		class Student(object):
 			__slots__=('name','age') #用tuple定义允许绑定的属性名称
 		s=Student()
@@ -232,16 +233,97 @@ Python学习
 					if value<0 or value>100
 						reise ValueError('score must between 0~100')
 					self._score = value -->
-
-
-
-
-	
-
-
-
-
-
+        Python内置的@property装饰器把一个方法变成属性调用：
+            class Student(object):
+                @property
+                def score(self):
+                    return self._score
+                @score.setter
+                def score(self,value):
+                    if not isinstance(value,int):
+                        raise ValueError('score must be an integer!')
+                    if value <0 or value >100:
+                        raise ValueError('score must between 0~100!')
+                    self._score = value
+            @property的实现比较复杂，它把一个getter方法变成属性，只需要加上@property就可以了，此时@property本              身又创建了另一个装饰器@score.setter：负责把一个setter方法变成属性赋值，于是，我们就拥有一个可控的             属性操作
+                s = Student()
+                s.score = 60  s.score => 60
+                s.score = 9999 =>ValueError:score must between 0~100!
+             注意：我们在对实例属性操作的时候，就知道该属性很可能不是直接暴露的，而是通过getter和setter方法来实现的，还可以定义只读属性，只定义getter方法，不定义setter方法就是一个只读属性
+             class Student(object):
+                @property
+                def birth(self):
+                    return self._birth
+                @birth.setter
+                def birth(self,value):
+                    self._birth = value
+                @property
+                def age(self):
+                    return 2015-self._birth
+	         上面的birth是可读写属性，而age就是一个只读属性，因为age可以根据birth和当前的时间计算出来
+	9-3.多重继承
+	    9-3-1.多重继承
+	        #动物类
+	        class Animal(object)
+	            pass
+	        #大类
+	        class Mammal(Animal):
+	            pass
+	        class Bird(Animal):
+	            pass
+	        #各种动物
+	        class Dog(Mammal):
+	            pass
+	        class Bat(Mammal):
+	            pass
+	        class Parrot(Bird):
+	            pass
+	        class Ostrich(Bird):
+	            pass
+            #定义Runable和Flyable类
+            class Runnable(object):
+                def run(self):
+                    print('Running....')
+            class Flyable(object):
+                def fly(self):
+                    print(Fly.....')
+            对于需要Runnable功能的动物，就多继承一个Runnable，例如Dog
+            class Dog(Mammal,Runable):
+                pass
+            对于需要Flyable功能的动物，就多继承一个Flyable，例如Dog
+            class Bat(Mammal,Flyable):
+                pass
+        9-3-2.MixIn
+            MixIn:在设计类的继承关系时，通常，主线都是单一继承下来的，但是，如果需要“混入”额外的功能，通过多重继承就可以实现，这种继承称之为MixIn。
+            为了更好的看出继承关系，把Runnable和Flyable改为RunnableMixIn和FlyableMixIn.....
+            class Dog(Mammal,RunnableMixIn,CarnivorousMixIn):
+                pass
+    9-4.定制类
+        9-4-1.__str__
+            (1)
+            class Student(object):
+                def __init__(self.name):
+                    self.name = name
+            print(Student('Michael'))
+            >>><__main__.Student object at 0x109afb190>
+            (2)
+            class Student(object):
+                def __init__(self,name):
+                    self.name = name
+                def __str__(self):
+                    return 'Student object (name:%s)' %self.name
+            print(Student('Michael'))
+            >>>Student object (name:Michael)
+            s = Student('Michael')
+            s
+            >>><__main__.Student object at 0x109afb310>
+            (3)__str__()和__repr__()：两者的区别是__str__()返回用户看到的字符串，而__repr__()返回程序开发者看到的字符串，也就是说，__repr__()是为调试服务的。解决办法是再定义一个__repr__(),通常__str__和__repr__()代码都是一样的，所以，有个偷懒的写法：
+            class Student(object):
+                def __init__(self, name):
+                    self.name = name
+                def __str__(self):
+                    return 'Student object (name=%s)' % self.name
+                __repr__ = __str__
 
 
 

@@ -452,11 +452,30 @@ Python学习
 		(1)调试
 			使用print()把可能有问题的变量打印出来看看
 		(2)断言
-			
-
-
-
-
+			def foo(s):
+				n = int(s)
+				assert n!=0,'n is zero'
+				return 10/n
+			def main():
+				foo('0')
+			assert的意思是：表达式n！=0应该是True，否则，根据程序运行的逻辑，后面的代码肯定会出错，凡是用print()来辅助查看的地方，都可以用断言(assert)来替代
+		(3)logging
+			把print()替换为logging是第3种方式，和assert比，logging不会抛出错误，而且可以输出到文件
+			import logging
+			logging.basicConfig(level=logging.INFO)
+			s='0'
+			n=int(s)
+			logging.info('n=%d' %n)
+			print(10/n)
+		(4)pdb
+			第四种是启动Python的调试器pdb，让程序以单步方式运行，可以随时查看运行状态
+			#err.py
+			s='0'
+			n=int(s)
+			print(10/n)
+			>>>python -m pdb err.py
+			以参数-m pdb启动后，pdb定位到下一步要执行的代码->s='0'.输入命令l来查看代码：输入命令n可以单步执行代码。
+		(5)IDE
 
 
 
